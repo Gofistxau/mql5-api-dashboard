@@ -48,12 +48,14 @@
 
         .profit-card {
             background-color: #1e1e1e;
-            padding: 20px;
+            padding: 16px;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border: 1px solid #2d2d2d;
             text-align: center;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .profit-card:hover {
@@ -68,9 +70,25 @@
         }
 
         .profit-value {
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: #ffffff;
+            text-align: center;
+        }
+        .profit-value .main-num {
+            font-size: 1.1em;
+            display: block;
+        }
+        .profit-value .percent {
+            font-size: 0.9em;
+            display: block;
+            margin-top: 2px;
+        }
+        .profit-value .thb {
+            font-size: 0.8em;
+            color: #fff;
+            display: block;
+            margin-top: 2px;
         }
 
         .positive {
@@ -145,6 +163,15 @@
             .container {
                 max-width: 800px;
                 margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .profit-value {
+                font-size: 0.95rem;
+            }
+            .profit-card {
+                padding: 10px;
             }
         }
 
@@ -364,9 +391,21 @@
             const monthPercent = formatProfitPercent(profit.monthProfit, currentBalance);
             const yearPercent = formatProfitPercent(profit.yearProfit, currentBalance);
 
-            dayProfit.innerHTML = `${getProfitIcon(profit.dayProfit)}${formatNumber(profit.dayProfit)}<br><span style='font-size:0.6em;color:#fff'>${dayPercent ? dayPercent + ' ' : ''}(${formatTHB(profit.dayProfit)})</span>`;
-            monthProfit.innerHTML = `${getProfitIcon(profit.monthProfit)}${formatNumber(profit.monthProfit)}<br><span style='font-size:0.6em;color:#fff'>${monthPercent ? monthPercent + ' ' : ''}(${formatTHB(profit.monthProfit)})</span>`;
-            yearProfit.innerHTML = `${getProfitIcon(profit.yearProfit)}${formatNumber(profit.yearProfit)}<br><span style='font-size:0.6em;color:#fff'>${yearPercent ? yearPercent + ' ' : ''}(${formatTHB(profit.yearProfit)})</span>`;
+            dayProfit.innerHTML = `
+                ${getProfitIcon(profit.dayProfit)}<span class="main-num">${formatNumber(profit.dayProfit)}</span>
+                <span class="percent">${dayPercent ? dayPercent : ''}</span>
+                <span class="thb">(${formatTHB(profit.dayProfit)})</span>
+            `;
+            monthProfit.innerHTML = `
+                ${getProfitIcon(profit.monthProfit)}<span class="main-num">${formatNumber(profit.monthProfit)}</span>
+                <span class="percent">${monthPercent ? monthPercent : ''}</span>
+                <span class="thb">(${formatTHB(profit.monthProfit)})</span>
+            `;
+            yearProfit.innerHTML = `
+                ${getProfitIcon(profit.yearProfit)}<span class="main-num">${formatNumber(profit.yearProfit)}</span>
+                <span class="percent">${yearPercent ? yearPercent : ''}</span>
+                <span class="thb">(${formatTHB(profit.yearProfit)})</span>
+            `;
 
             dayProfit.className = `profit-value ${profit.dayProfit >= 0 ? 'positive' : 'negative'}`;
             monthProfit.className = `profit-value ${profit.monthProfit >= 0 ? 'positive' : 'negative'}`;
