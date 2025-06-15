@@ -413,55 +413,55 @@
             updateTradesTable(trades);
         }
 
-        function loadTrades() {
-            fetch('http://localhost:5000/trades')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(trades => {
-                    console.log('Loaded trades:', trades); // Debug log
-                    if (trades.length === 0) {
-                        console.log('No trades found');
-                        document.getElementById('tradesTableBody').innerHTML = 
-                            '<tr><td colspan="4" class="loading">No trades found</td></tr>';
-                        return;
-                    }
-
-                    updateSummary(trades);
-                })
-                .catch(error => {
-                    console.error('Error loading trades:', error);
-                    document.getElementById('tradesTableBody').innerHTML = 
-                        '<tr><td colspan="4" class="loading">Error loading trades</td></tr>';
-                });
-        }
-
-        function clearTrades() {
-            if (confirm('Are you sure you want to clear all trading data? This action cannot be undone.')) {
-                fetch('http://localhost:5000/trades', {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        // Clear the UI
-                        document.getElementById('currentBalance').textContent = '-';
-                        document.getElementById('dayProfit').textContent = '-';
-                        document.getElementById('monthProfit').textContent = '-';
-                        document.getElementById('yearProfit').textContent = '-';
-                        document.getElementById('tradesTableBody').innerHTML = 
-                            '<tr><td colspan="4" class="loading">No trades found</td></tr>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to clear trades. Please try again.');
-                });
+function loadTrades() {
+    fetch('/trades')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        }
+            return response.json();
+        })
+        .then(trades => {
+            console.log('Loaded trades:', trades); // Debug log
+            if (trades.length === 0) {
+                console.log('No trades found');
+                document.getElementById('tradesTableBody').innerHTML = 
+                    '<tr><td colspan="4" class="loading">No trades found</td></tr>';
+                return;
+            }
+
+            updateSummary(trades);
+        })
+        .catch(error => {
+            console.error('Error loading trades:', error);
+            document.getElementById('tradesTableBody').innerHTML = 
+                '<tr><td colspan="4" class="loading">Error loading trades</td></tr>';
+        });
+}
+
+function clearTrades() {
+    if (confirm('Are you sure you want to clear all trading data? This action cannot be undone.')) {
+        fetch('/trades', {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                // Clear the UI
+                document.getElementById('currentBalance').textContent = '-';
+                document.getElementById('dayProfit').textContent = '-';
+                document.getElementById('monthProfit').textContent = '-';
+                document.getElementById('yearProfit').textContent = '-';
+                document.getElementById('tradesTableBody').innerHTML = 
+                    '<tr><td colspan="4" class="loading">No trades found</td></tr>';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to clear trades. Please try again.');
+        });
+    }
+}
 
         // Load trades when page loads
         window.onload = async function() {
